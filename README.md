@@ -3,7 +3,7 @@ Java implementation of John Conway's Game of Life. Improvements are ongoing. Exe
 
 ### Features
 - 50x50 matrix of "selectable" cells
-- Standard controls ("Clear," "Start," and "Stop" buttons
+- Standard controls ("Clear," "Start," and "Stop" buttons)
 - Dropdown menu featuring notable, preexisting patterns (Glider, Gosper Glider Gun, Lightweight Spaceship, etc.) along with a pseudorandom selecton of active cells
 
 ### Future Improvements
