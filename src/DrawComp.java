@@ -104,10 +104,7 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i + 51).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Upper-right Cornner
-            if (i == 49) {
+            } else if (i == 49) { // Upper-right Cornner
                 if (rectArray.get(i - 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -119,10 +116,7 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i + 50).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Lower-left Corner
-            if (i == 2450) {
+            } else if (i == 2450) { // Lower-left Corner
                 if (rectArray.get(i + 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -134,10 +128,7 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i - 49).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Lower-right Corner
-            if (i == 2499) {
+            } else if (i == 2499) { // Lower-right Corner
                 if (rectArray.get(i - 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -149,10 +140,7 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i - 51).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Top row
-            if ((i >= 1) && (i <= 48)) {
+            } else if ((i >= 1) && (i <= 48)) { // Top row
                 if (rectArray.get(i - 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -172,13 +160,10 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i + 51).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Left-most Column
-            if ((((rectArray.get(i).x) == 10)) && 
+            } else if ((((rectArray.get(i).x) == 10)) && 
                     (tempY <= 49) && 
                     (i != 0) && 
-                    (i != 2450)) {
+                    (i != 2450)) { // Left-most Column
                 if (rectArray.get(i - 50).getHealth() == true) {
                     neighbors++;
                 }
@@ -199,10 +184,7 @@ public class DrawComp extends JPanel {
                     neighbors++;
                 }
 
-            }
-            
-            // Bottom Row
-            if ((i >= 2451) && (i <= 2498)) {
+            } else if ((i >= 2451) && (i <= 2498)) { // Bottom Row
                 if (rectArray.get(i - 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -222,12 +204,9 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i - 49).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // Right-most Column
-            if ((((rectArray.get(i).x) == 500)) && 
+            } else if ((((rectArray.get(i).x) == 500)) && 
                     (tempY <= 49) && (i != 49) && 
-                    (i != 2499)) {
+                    (i != 2499)) { // Right-most Column
                 if (rectArray.get(i - 1).getHealth() == true) {
                     neighbors++;
                 }
@@ -247,25 +226,7 @@ public class DrawComp extends JPanel {
                 if (rectArray.get(i - 51).getHealth() == true) {
                     neighbors++;
                 }
-            }
-            
-            // All others
-            if ((i != 0) && 
-                    (i != 49) && 
-                    (i != 2450) && 
-                    (i != 2499) && 
-                    !((i >= 1) && 
-                    (i <= 48)) && 
-                    !((i >= 2451) && 
-                    (i <= 2498)) && 
-                    !((((rectArray.get(i).x) == 10)) && 
-                    (tempY <= 49) && 
-                    (i != 0) && 
-                    (i != 2450)) && 
-                    !((((rectArray.get(i).x) == 500)) && 
-                    (tempY <= 49) && 
-                    (i != 49) && 
-                    (i != 2499))) {
+            } else { // All others
                 if (rectArray.get(i + 1).getHealth() == true) {
                     neighbors++;
                 }

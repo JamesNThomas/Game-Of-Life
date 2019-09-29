@@ -18,7 +18,7 @@ public class Main extends JFrame {
                                    "Lightweight Spaceship", "Random"};
         JComboBox options = new JComboBox(optionsStrings);
 
-        DrawComp DC = new DrawComp();
+        final DrawComp DC = new DrawComp();
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.add(DC, BorderLayout.CENTER);
@@ -45,7 +45,7 @@ public class Main extends JFrame {
         window.setResizable(false);
         
         //---Timer loop for the game--------------------------------------------
-        Timer time = new Timer(60, new ActionListener() {
+        final Timer time = new Timer(60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 DC.ruleCheck();
