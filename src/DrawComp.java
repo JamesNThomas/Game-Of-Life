@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 public class DrawComp extends JPanel {
 
     private Graphics2D g;
-    private ArrayList<MyRectangle> rectArray;
+    private ArrayList<Cell> rectArray;
     private int neighbors;
     private int[] gosperGunArray = {512, 351, 352, 401, 402, 361, 411, 461, 312,
         263, 264, 563, 564, 316, 367, 418, 417, 467,
@@ -23,7 +23,7 @@ public class DrawComp extends JPanel {
 
         for (int i = 1; i <= 50; i++) {
             for (int j = 1; j <= 50; j++) {
-                rectArray.add(new MyRectangle(j * 10, i * 10, 10, 10));
+                rectArray.add(new Cell(j * 10, i * 10, 10, 10));
             }
         }
     }
