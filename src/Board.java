@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JPanel;
 
-public class DrawComp extends JPanel {
+public class Board extends JPanel {
 
     private Graphics2D g;
     private ArrayList<Cell> rectArray;
@@ -17,13 +17,16 @@ public class DrawComp extends JPanel {
     private int[] gliderArray = {53, 104, 152, 153, 154};
     
     //---Default Constructor----------------------------------------------------
-    public DrawComp() {
+    public Board() {
 
         rectArray = new ArrayList<>();
 
         for (int i = 1; i <= 50; i++) {
             for (int j = 1; j <= 50; j++) {
-                rectArray.add(new Cell(j * 10, i * 10, 10, 10));
+                rectArray.add(new Cell(j * 10,
+                                       i * 10,
+                                       10, 10,
+                                       j, i));
             }
         }
     }

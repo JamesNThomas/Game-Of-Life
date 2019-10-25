@@ -6,11 +6,18 @@ public class Cell extends Rectangle {
     
     private Color color;
     private boolean health;
-    private int neighbors;
+    private int neighbors, coordX, coordY;
     
     //---Constructor------------------------------------------------------------
-    public Cell(int x, int y, int h, int w) {
+    public Cell(int x,
+                int y,
+                int h,
+                int w,
+                int coordX,
+                int coordY) {
         super(x, y, h, w);
+        this.coordX = coordX;
+        this.coordY = coordY;
         this.health = false;
     }
     
