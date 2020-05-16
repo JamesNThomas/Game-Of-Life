@@ -14,14 +14,14 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
 
-        String[] optionsStrings = {"Glider", "Vertical Divider", "Gosper Glider Gun", 
+        String[] optionsStrings = {"PRESETS", "", "Glider", "Vertical Divider", "Gosper Glider Gun", 
                                    "Lightweight Spaceship", "Random"};
         JComboBox options = new JComboBox(optionsStrings);
 
-        DrawComp DC = new DrawComp();
+        final Board board = new Board();
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
-        panel1.add(DC, BorderLayout.CENTER);
+        panel1.add(board, BorderLayout.CENTER);
 
         JButton start = new JButton("Start");
         JButton clear = new JButton("Clear");
@@ -45,12 +45,12 @@ public class Main extends JFrame {
         window.setResizable(false);
         
         //---Timer loop for the game--------------------------------------------
-        Timer time = new Timer(60, new ActionListener() {
+        final Timer time = new Timer(60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                DC.ruleCheck();
-                DC.revalidate();
-                DC.repaint();
+                board.ruleCheck();
+                board.revalidate();
+                board.repaint();
             }
         });
         
@@ -58,10 +58,9 @@ public class Main extends JFrame {
         window.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 Point p = e.getPoint();
-                DC.checkPoint(p.getX(), p.getY());
-
-                DC.revalidate();
-                DC.repaint();
+                board.checkPoint(p.getX(), p.getY());
+                board.revalidate();
+                board.repaint();
             }
         });
         
@@ -69,9 +68,9 @@ public class Main extends JFrame {
         clear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                DC.clearRect();
-                DC.revalidate();
-                DC.repaint();
+                board.clearRect();
+                board.revalidate();
+                board.repaint();
             }
         });
         
@@ -98,27 +97,27 @@ public class Main extends JFrame {
                 JComboBox options = (JComboBox) ae.getSource();
                 
                 if(options.getSelectedItem().equals("Glider")) {
-                    DC.clearRect();
-                    DC.glider();
+                    board.clearRect();
+                    board.glider();
                     System.out.println("Check");
                 } else if(options.getSelectedItem().equals("Vertical Divider")) {
-                    DC.clearRect();
-                    DC.vertical();
+                    board.clearRect();
+                    board.vertical();
                 } else if(options.getSelectedItem().equals("Random")) {
-                    DC.clearRect();
-                    DC.random();
+                    board.clearRect();
+                    board.random();
                 } else if(options.getSelectedItem().equals(
                                                          "Gosper Glider Gun")) {
-                    DC.clearRect();
-                    DC.gosperGun();
+                    board.clearRect();
+                    board.gosperGun();
                 } else if(options.getSelectedItem().equals("Lightweight "
                                                          + "Spaceship")) {
-                    DC.clearRect();
-                    DC.lwSpaceship();
+                    board.clearRect();
+                    board.lwSpaceship();
                 }
                 
-                DC.revalidate();
-                DC.repaint();
+                board.revalidate();
+                board.repaint();
             }
             
         });
