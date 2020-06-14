@@ -68,7 +68,6 @@ public class Main extends JFrame {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                // System.out.println(100 - ((JSlider) e.getSource()).getValue());
                 int delay = 100 - ((JSlider) e.getSource()).getValue();
                 if (delay < 100) {
                     time.start();
