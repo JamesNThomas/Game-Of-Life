@@ -12,40 +12,49 @@ import javax.swing.event.ChangeListener;
 
 public class Main extends JFrame {
 
-    private static final int CANVAS_HEIGHT = 600;
+    private static final int CANVAS_HEIGHT = 650;
     private static final int CANVAS_WIDTH = 525;
+    private boolean running = false;
+
     public static void main(String[] args) {
+
+        final Main main = new Main();
 
         String[] optionsStrings = { "PRESETS", "", "Glider", "Vertical Divider", "Gosper Glider Gun",
                 "Lightweight Spaceship", "Random" };
         JComboBox options = new JComboBox(optionsStrings);
 
         final Board board = new Board();
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new BorderLayout());
-        panel1.add(board, BorderLayout.CENTER);
+        JPanel boardPanel = new JPanel();
+        boardPanel.setLayout(new BorderLayout());
+        boardPanel.add(board, BorderLayout.CENTER);
 
         JButton start = new JButton("Start");
         JButton clear = new JButton("Clear");
         JButton stop = new JButton("Stop");
-        JPanel panel2 = new JPanel();
-        panel2.add(clear);
-        panel2.add(start);
-        panel2.add(stop);
-        panel2.add(options);
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(clear);
+        controlPanel.add(start);
+        controlPanel.add(stop);
+        controlPanel.add(options);
+
+        JLabel speedSliderLabel = new JLabel("SPEED", JLabel.CENTER);
+        JPanel sliderLabelPanel = new JPanel();
+        sliderLabelPanel.add(speedSliderLabel);
 
         JSlider speedSlider = new JSlider(0, 100);
         speedSlider.setMajorTickSpacing(50);
         speedSlider.setMinorTickSpacing(10);
         speedSlider.setPaintTicks(true);
-        JPanel panel3 = new JPanel();
-        panel3.add(speedSlider);
+        JPanel sliderPanel = new JPanel();
+        sliderPanel.add(speedSlider);
 
-        JPanel panel4 = new JPanel();
-        panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS));
-        panel4.add(panel1);
-        panel4.add(panel2);
-        panel4.add(panel3);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(boardPanel);
+        mainPanel.add(controlPanel);
+        mainPanel.add(sliderLabelPanel);
+        mainPanel.add(sliderPanel);
 
         JFrame window = new JFrame();
         window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -70,7 +79,8 @@ public class Main extends JFrame {
             public void stateChanged(ChangeEvent e) {
                 int delay = 100 - ((JSlider) e.getSource()).getValue();
                 if (delay < 100) {
-                    time.start();
+                    if (main.getRunning())
+                        time.start();
                     time.setDelay(delay);
                 } else
                     time.stop();
@@ -100,6 +110,7 @@ public class Main extends JFrame {
         //---Listener to start the game-----------------------------------------
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
+                main.setRunning(true);
                 time.start();
             }
         });
@@ -108,6 +119,7 @@ public class Main extends JFrame {
         stop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                main.setRunning(false);
                 time.stop();
             }
 
@@ -145,7 +157,15 @@ public class Main extends JFrame {
             
         });
 
-        window.add(panel4);
+        window.add(mainPanel);
         window.setVisible(true);
+    }
+
+    private void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    private boolean getRunning() {
+        return this.running;
     }
 }
