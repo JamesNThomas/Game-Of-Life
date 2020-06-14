@@ -15,6 +15,7 @@ public class Main extends JFrame {
     private static final int CANVAS_HEIGHT = 650;
     private static final int CANVAS_WIDTH = 525;
     private boolean running = false;
+    private int delay = 50;
 
     public static void main(String[] args) {
 
@@ -63,7 +64,7 @@ public class Main extends JFrame {
         window.setResizable(false);
 
         // ---Timer loop for the game--------------------------------------------
-        final Timer time = new Timer(50, new ActionListener() {
+        final Timer time = new Timer(main.getDelay(), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 board.ruleCheck();
@@ -77,11 +78,11 @@ public class Main extends JFrame {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                int delay = 100 - ((JSlider) e.getSource()).getValue();
-                if (delay < 100) {
+                main.setDelay(100 - ((JSlider) e.getSource()).getValue());
+                if (main.getDelay() < 100) {
                     if (main.getRunning())
                         time.start();
-                    time.setDelay(delay);
+                    time.setDelay(main.getDelay());
                 } else
                     time.stop();
             }
@@ -110,8 +111,10 @@ public class Main extends JFrame {
         //---Listener to start the game-----------------------------------------
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                main.setRunning(true);
-                time.start();
+                if (main.getDelay() < 100) {
+                    main.setRunning(true);
+                    time.start();
+                }
             }
         });
         
@@ -167,5 +170,13 @@ public class Main extends JFrame {
 
     private boolean getRunning() {
         return this.running;
+    }
+
+    private void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    private int getDelay() {
+        return this.delay;
     }
 }
