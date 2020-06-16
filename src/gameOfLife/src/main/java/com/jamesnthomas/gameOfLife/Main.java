@@ -12,10 +12,10 @@ import javax.swing.event.ChangeListener;
 
 public class Main extends JFrame {
 
-    private static final int CANVAS_HEIGHT = 650;
-    private static final int CANVAS_WIDTH = 525;
-    private boolean running = false;
+    private int height = 675;
+    private int width = 525;
     private int delay = 50;
+    private boolean running = false;
 
     public static void main(String[] args) {
 
@@ -28,7 +28,7 @@ public class Main extends JFrame {
         final Board board = new Board();
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new BorderLayout());
-        boardPanel.add(board, BorderLayout.CENTER);
+        boardPanel.add(board);
 
         JButton start = new JButton("Start");
         JButton clear = new JButton("Clear");
@@ -40,25 +40,46 @@ public class Main extends JFrame {
         controlPanel.add(options);
 
         JLabel speedSliderLabel = new JLabel("SPEED", JLabel.CENTER);
-        JPanel sliderLabelPanel = new JPanel();
-        sliderLabelPanel.add(speedSliderLabel);
-
         JSlider speedSlider = new JSlider(0, 100);
         speedSlider.setMajorTickSpacing(50);
         speedSlider.setMinorTickSpacing(10);
         speedSlider.setPaintTicks(true);
+        JPanel speedLabelPanel = new JPanel();
+        JPanel speedSliderPanel = new JPanel();
+        JPanel speedPanel = new JPanel();
+        speedPanel.setLayout(new BoxLayout(speedPanel, BoxLayout.Y_AXIS));
+        speedLabelPanel.add(speedSliderLabel);
+        speedSliderPanel.add(speedSlider);
+        speedPanel.add(speedLabelPanel);
+        speedPanel.add(speedSliderPanel);
+
+        JLabel sizeSliderLabel = new JLabel("SIZE", JLabel.CENTER);
+        JSlider sizeSlider = new JSlider(50, 100);
+        sizeSlider.setMajorTickSpacing(10);
+        sizeSlider.setMinorTickSpacing(5);
+        sizeSlider.setPaintTicks(true);
+        sizeSlider.setValue(50);
+        JPanel sizeLabelPanel = new JPanel();
+        JPanel sizeSliderPanel = new JPanel();
+        JPanel sizePanel = new JPanel();
+        sizePanel.setLayout(new BoxLayout(sizePanel, BoxLayout.Y_AXIS));
+        sizeLabelPanel.add(sizeSliderLabel);
+        sizeSliderPanel.add(sizeSlider);
+        sizePanel.add(sizeLabelPanel);
+        sizePanel.add(sizeSliderPanel);
+
         JPanel sliderPanel = new JPanel();
-        sliderPanel.add(speedSlider);
+        sliderPanel.add(speedPanel);
+        sliderPanel.add(sizePanel);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(boardPanel);
         mainPanel.add(controlPanel);
-        mainPanel.add(sliderLabelPanel);
         mainPanel.add(sliderPanel);
 
-        JFrame window = new JFrame();
-        window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        final JFrame window = new JFrame();
+        window.setSize(main.getWidth(), main.getHeight());
         window.setTitle("Conway's Game of Life");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -85,6 +106,25 @@ public class Main extends JFrame {
                     time.setDelay(main.getDelay());
                 } else
                     time.stop();
+            }
+        });
+
+        // ---Listener for size slider-------------------------------------------
+        sizeSlider.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                if(!source.getValueIsAdjusting()) {
+                    main.setWidth((source.getValue() * 10) + 25);
+                    main.setHeight((source.getValue() * 10) + 175);
+                    board.setBoardSize(source.getValue());
+                    board.resizeBoard();
+                    board.revalidate();
+                    board.repaint();
+                    window.setSize(main.getWidth(), main.getHeight());
+                    window.repaint();
+                }
             }
         });
         
@@ -178,5 +218,21 @@ public class Main extends JFrame {
 
     private int getDelay() {
         return this.delay;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    private void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    private void setHeight(int height) {
+        this.height = height;
     }
 }
