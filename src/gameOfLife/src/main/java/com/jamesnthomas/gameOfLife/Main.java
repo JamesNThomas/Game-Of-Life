@@ -26,6 +26,7 @@ public class Main extends JFrame {
         JComboBox options = new JComboBox(optionsStrings);
 
         final Board board = new Board();
+        board.setBoardSize(50);
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new BorderLayout());
         boardPanel.add(board);
