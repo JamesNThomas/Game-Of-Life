@@ -21,8 +21,8 @@ public class Main extends JFrame {
 
         final Main main = new Main();
 
-        String[] optionsStrings = { "PRESETS", "", "Glider", "Vertical Divider", "Gosper Glider Gun",
-                "Lightweight Spaceship", "Random" };
+        String[] optionsStrings = { "PRESETS", "", "Glider", "Vertical Divider", 
+            "Gosper Glider Gun", "Lightweight Spaceship", "Random" };
         JComboBox options = new JComboBox(optionsStrings);
 
         final Board board = new Board();
@@ -85,7 +85,7 @@ public class Main extends JFrame {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
 
-        // ---Timer loop for the game--------------------------------------------
+        // ---Timer loop for the game-------------------------------------------
         final Timer time = new Timer(main.getDelay(), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -95,7 +95,7 @@ public class Main extends JFrame {
             }
         });
 
-        // ---Listener for speed slider------------------------------------------
+        // ---Listener for speed slider-----------------------------------------
         speedSlider.addChangeListener(new ChangeListener() {
 
             @Override
@@ -110,7 +110,7 @@ public class Main extends JFrame {
             }
         });
 
-        // ---Listener for size slider-------------------------------------------
+        // ---Listener for size slider------------------------------------------
         sizeSlider.addChangeListener(new ChangeListener() {
 
             @Override
@@ -179,7 +179,8 @@ public class Main extends JFrame {
                     board.clearRect();
                     board.glider();
                     System.out.println("Check");
-                } else if(options.getSelectedItem().equals("Vertical Divider")) {
+                } else if(options.getSelectedItem()
+                            .equals("Vertical Divider")) {
                     board.clearRect();
                     board.vertical();
                 } else if(options.getSelectedItem().equals("Random")) {

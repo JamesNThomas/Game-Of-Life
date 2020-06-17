@@ -15,7 +15,8 @@ public class Board extends JPanel {
         263, 264, 563, 564, 316, 367, 418, 417, 467,
         516, 415, 371, 321, 271, 272, 322, 372, 423,
         223, 225, 175, 475, 425, 285, 286, 335, 336};
-    private int[] spaceshipArray = {502, 505, 556, 656, 606, 655, 653, 654, 602};
+    private int[] spaceshipArray = 
+        {502, 505, 556, 656, 606, 655, 653, 654, 602};
     private int[] gliderArray = {53, 104, 152, 153, 154};
     
     //---Default Constructor----------------------------------------------------
@@ -35,17 +36,17 @@ public class Board extends JPanel {
         }
     }
 
-    //---Board Size Accessor-----------------------------------------------------
+    //---Board Size Accessor----------------------------------------------------
     public void setBoardSize(int size) {
         this.boardSize = size;
     }
 
-    //---Board Size Mutator------------------------------------------------------
+    //---Board Size Mutator-----------------------------------------------------
     public int getBoardSize() {
         return this.boardSize;
     }
 
-    //---Resizes Board in n x n dimensions---------------------------------------
+    //---Resizes Board in n x n dimensions--------------------------------------
     public void resizeBoard() {
         rectArray.clear();
         for (int i = 1; i <= this.boardSize; i++) {
@@ -119,15 +120,20 @@ public class Board extends JPanel {
             tempY = checkedCell.getCoordY();
             if (checkedCell.getHealth()) {
                 if (tempX == realX - 1) {
-                    if ((tempY == realY - 1) || (tempY == realY) || (tempY == realY + 1))
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY) 
+                                || (tempY == realY + 1))
                         neighbors++;
                 }
                 if (tempX == realX) {
-                    if ((tempY == realY - 1) || (tempY == realY + 1))
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY + 1))
                         neighbors++;
                 }
                 if (tempX == realX + 1) {
-                    if ((tempY == realY - 1) || (tempY == realY) || (tempY == realY + 1))
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY) 
+                                || (tempY == realY + 1))
                         neighbors++;
                 }
             }
