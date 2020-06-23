@@ -1,5 +1,5 @@
 # Game-Of-Life 1.1.0
-Java implementation of John Conway's Game of Life. Improvements are ongoing. Executable JAR file included in the main directory.
+Java implementation of John Conway's Game of Life. Improvements are ongoing.
 
 ### Features
 - Tweakable game board size (50x50 - 100x100) controlled by slider
