@@ -51,4 +51,12 @@ public class Cell extends Rectangle {
     public int getNeighbors() {
         return this.neighbors;
     }
+
+    public int getCoordX() {
+        return this.coordX;
+    }
+
+    public int getCoordY() {
+        return this.coordY;
+    }
 }

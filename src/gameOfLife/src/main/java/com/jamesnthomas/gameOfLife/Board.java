@@ -9,12 +9,14 @@ public class Board extends JPanel {
 
     private Graphics2D g;
     private ArrayList<Cell> rectArray;
+    private int boardSize;
     private int neighbors;
     private int[] gosperGunArray = {512, 351, 352, 401, 402, 361, 411, 461, 312,
         263, 264, 563, 564, 316, 367, 418, 417, 467,
         516, 415, 371, 321, 271, 272, 322, 372, 423,
         223, 225, 175, 475, 425, 285, 286, 335, 336};
-    private int[] spaceshipArray = {502, 505, 556, 656, 606, 655, 653, 654, 602};
+    private int[] spaceshipArray = 
+        {502, 505, 556, 656, 606, 655, 653, 654, 602};
     private int[] gliderArray = {53, 104, 152, 153, 154};
     
     //---Default Constructor----------------------------------------------------
@@ -24,6 +26,31 @@ public class Board extends JPanel {
 
         for (int i = 1; i <= 50; i++) {
             for (int j = 1; j <= 50; j++) {
+                rectArray.add(new Cell(j * 10,
+                                       i * 10,
+                                       10, 
+                                       10,
+                                       j, 
+                                       i));
+            }
+        }
+    }
+
+    //---Board Size Accessor----------------------------------------------------
+    public void setBoardSize(int size) {
+        this.boardSize = size;
+    }
+
+    //---Board Size Mutator-----------------------------------------------------
+    public int getBoardSize() {
+        return this.boardSize;
+    }
+
+    //---Resizes Board in n x n dimensions--------------------------------------
+    public void resizeBoard() {
+        rectArray.clear();
+        for (int i = 1; i <= this.boardSize; i++) {
+            for (int j = 1; j <= this.boardSize; j++) {
                 rectArray.add(new Cell(j * 10,
                                        i * 10,
                                        10, 10,
@@ -80,192 +107,51 @@ public class Board extends JPanel {
             rectArray.get(i).setHealth(false);
         }
     }
+
+    private int computeNeighbors(Cell cell, ArrayList<Cell> healthyCells) {
+        neighbors = 0;
+        int tempX = 0;
+        int tempY = 0;
+        int realX = cell.getCoordX();
+        int realY = cell.getCoordY();
+
+        for (Cell checkedCell : healthyCells) {
+            tempX = checkedCell.getCoordX();
+            tempY = checkedCell.getCoordY();
+            if (checkedCell.getHealth()) {
+                if (tempX == realX - 1) {
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY) 
+                                || (tempY == realY + 1))
+                        neighbors++;
+                }
+                if (tempX == realX) {
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY + 1))
+                        neighbors++;
+                }
+                if (tempX == realX + 1) {
+                    if ((tempY == realY - 1) 
+                            || (tempY == realY) 
+                                || (tempY == realY + 1))
+                        neighbors++;
+                }
+            }
+        }
+
+        return neighbors;
+    }
     
     //---Iterates Through Each Rectangle, Checking its Neighbors----------------
     public void ruleCheck() {
+        ArrayList<Cell> healthyCells = new ArrayList<Cell>();
+        for (Cell cell : rectArray) {
+            if (cell.getHealth())
+                healthyCells.add(cell);
+        }
 
-        neighbors = 0;
-
-        int tempX = 0;
-        int tempY = 0;
-
-        for (int i = 0; i < rectArray.size(); i++) {
-            neighbors = 0;
-
-            tempX = ((int) ((rectArray.get(i).x / 10) - .5));
-            tempY = ((int) ((rectArray.get(i).y - 24) / 10));
-            
-            // Upper-left Corner
-            if (i == 0) {
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 51).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if (i == 49) { // Upper-right Cornner
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 49).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if (i == 2450) { // Lower-left Corner
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 49).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if (i == 2499) { // Lower-right Corner
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 51).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if ((i >= 1) && (i <= 48)) { // Top row
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 49).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 51).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if ((((rectArray.get(i).x) == 10)) && 
-                    (tempY <= 49) && 
-                    (i != 0) && 
-                    (i != 2450)) { // Left-most Column
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 48).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 51).getHealth() == true) {
-                    neighbors++;
-                }
-
-            } else if ((i >= 2451) && (i <= 2498)) { // Bottom Row
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 51).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 49).getHealth() == true) {
-                    neighbors++;
-                }
-            } else if ((((rectArray.get(i).x) == 500)) && 
-                    (tempY <= 49) && (i != 49) && 
-                    (i != 2499)) { // Right-most Column
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 49).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 51).getHealth() == true) {
-                    neighbors++;
-                }
-            } else { // All others
-                if (rectArray.get(i + 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 1).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 50).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 49).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i - 51).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 49).getHealth() == true) {
-                    neighbors++;
-                }
-
-                if (rectArray.get(i + 51).getHealth() == true) {
-                    neighbors++;
-                }
-            }
-            
-            // Assigning neighbors
-            rectArray.get(i).setNeighbors(neighbors);
+        for (Cell cell : rectArray) { 
+            cell.setNeighbors(computeNeighbors(cell, healthyCells));
         }
         
         
@@ -294,7 +180,9 @@ public class Board extends JPanel {
     
     //---Applies a vertical column ("Vertical Divider)--------------------------
     public void vertical() {
-        for (int i = 24; i <= 2474; i += 50) {
+        int size = this.boardSize;
+        int bound = ((size * size) - 2) - size;
+        for (int i = (size / 2) - 1; i <= bound; i += size) {
             rectArray.get(i).setHealth(true);
             rectArray.get(i).setColor(Color.BLACK);
         }
