@@ -17,3 +17,5 @@ nb-configuration.xml
 
 # Manifest Files #
 Manifest.txt
+
+.DS_Store
