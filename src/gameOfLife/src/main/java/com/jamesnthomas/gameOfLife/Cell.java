@@ -12,11 +12,9 @@ public class Cell extends Rectangle {
     //---Constructor------------------------------------------------------------
     public Cell(int x,
                 int y,
-                int h,
-                int w,
                 int coordX,
                 int coordY) {
-        super(x, y, h, w);
+        super(x, y, 10, 10);
         this.coordX = coordX;
         this.coordY = coordY;
         this.health = false;
