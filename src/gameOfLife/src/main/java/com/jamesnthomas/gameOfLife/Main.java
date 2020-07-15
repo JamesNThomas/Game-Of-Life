@@ -186,8 +186,8 @@ public class Main extends JFrame {
                 } else if(options.getSelectedItem().equals("Random")) {
                     board.clearRect();
                     board.random();
-                } else if(options.getSelectedItem().equals(
-                                                         "Gosper Glider Gun")) {
+                } else if(options.getSelectedItem()
+                            .equals("Gosper Glider Gun")) {
                     board.clearRect();
                     board.gosperGun();
                 } else if(options.getSelectedItem().equals("Lightweight "

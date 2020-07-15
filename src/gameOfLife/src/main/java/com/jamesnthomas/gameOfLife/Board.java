@@ -1,39 +1,36 @@
 package com.jamesnthomas.gameOfLife;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
 
     private Graphics2D g;
-    private ArrayList<Cell> rectArray;
+    private HashMap<String, Cell> cells;
     private int boardSize;
     private int neighbors;
-    private int[] gosperGunArray = {512, 351, 352, 401, 402, 361, 411, 461, 312,
-        263, 264, 563, 564, 316, 367, 418, 417, 467,
-        516, 415, 371, 321, 271, 272, 322, 372, 423,
-        223, 225, 175, 475, 425, 285, 286, 335, 336};
-    private int[] spaceshipArray = 
-        {502, 505, 556, 656, 606, 655, 653, 654, 602};
-    private int[] gliderArray = {53, 104, 152, 153, 154};
+    private String[] gosperGunArray = {"6,2", "7,2", "7,3", "6,3", "6,12",
+        "7,12", "8,12", "9,13", "10,14", "10,15", "5,13", "4,14", "4,15",
+        "5,17", "6,18", "7,18", "8,18", "9,17", "7,19", "7,16", "6,22",
+        "6,23", "5,23", "5,22", "4,22", "4,23", "3,24", "7,24", "3,26",
+        "2,26", "7,26", "8,26", "4,36", "5,36", "5,37", "4,37"};
+    private String[] spaceshipArray = 
+        {"13,2", "15,2", "16,3", "16,4", "16,5", "16,6", "15,6", "14,6", "13,5"};
+    private String[] gliderArray = {"4,2", "4,3", "4,4", "3,4", "2,3"};
     
     //---Default Constructor----------------------------------------------------
     public Board() {
 
-        rectArray = new ArrayList<>();
+        cells = new HashMap<String, Cell>();
 
         for (int i = 1; i <= 50; i++) {
             for (int j = 1; j <= 50; j++) {
-                rectArray.add(new Cell(j * 10,
-                                       i * 10,
-                                       10, 
-                                       10,
-                                       j, 
-                                       i));
+                cells.put(i + "," + j, new Cell(j * 10, i * 10, j, i));
             }
         }
+        System.out.println(cells.size());
     }
 
     //---Board Size Accessor----------------------------------------------------
@@ -48,13 +45,10 @@ public class Board extends JPanel {
 
     //---Resizes Board in n x n dimensions--------------------------------------
     public void resizeBoard() {
-        rectArray.clear();
+        cells.clear();
         for (int i = 1; i <= this.boardSize; i++) {
             for (int j = 1; j <= this.boardSize; j++) {
-                rectArray.add(new Cell(j * 10,
-                                       i * 10,
-                                       10, 10,
-                                       j, i));
+                cells.put(i + "," + j, new Cell(j * 10, i * 10, j, i));
             }
         }
     }
@@ -66,13 +60,13 @@ public class Board extends JPanel {
 
         super.paintComponent(g);
 
-        for (int i = 0; i < rectArray.size(); i++) {
 
-            if (rectArray.get(i).getColor() != null) {
-                this.g.setPaint(rectArray.get(i).getColor());
-                this.g.fill(rectArray.get(i));
+        for (Cell cell : cells.values()) {
+            if (cell.getColor() != null) {
+                this.g.setPaint(cell.getColor());
+                this.g.fill(cell);
             }
-            this.g.drawRect(rectArray.get(i).x, rectArray.get(i).y, 10, 10);
+            this.g.drawRect(cell.x, cell.y, 10, 10);
         }
     }
 
@@ -85,16 +79,14 @@ public class Board extends JPanel {
 
         System.out.println(tempX + " , " + tempY);
 
-        for (int i = 0; i < rectArray.size(); i++) {
-            tempRect = rectArray.get(i);
-            if (((tempX * 10) == tempRect.x) && ((tempY * 10) == tempRect.y)) {
-                if (rectArray.get(i).getColor() == null) {
-                    rectArray.get(i).setColor(Color.BLACK);
-                    rectArray.get(i).setHealth(true);
-                    System.out.println(i);
+        for (Cell cell : cells.values()) {
+            if (((tempX * 10) == cell.x) && ((tempY * 10) == cell.y)) {
+                if (cell.getColor() == null) {
+                    cell.setColor(Color.BLACK);
+                    cell.setHealth(true);
                 } else {
-                    rectArray.get(i).setColor(null);
-                    rectArray.get(i).setHealth(false);
+                    cell.setColor(null);
+                    cell.setHealth(false);
                 }
             }
         }
@@ -102,89 +94,88 @@ public class Board extends JPanel {
     
     //---Resets Grid/Array------------------------------------------------------
     public void clearRect() {
-        for (int i = 0; i < rectArray.size(); i++) {
-            rectArray.get(i).setColor(null);
-            rectArray.get(i).setHealth(false);
+        for (Cell cell : cells.values()) {
+            cell.setColor(null);
+            cell.setHealth(false);
         }
     }
 
-    private int computeNeighbors(Cell cell, ArrayList<Cell> healthyCells) {
+    private int computeNeighbors(Cell cell, 
+                                    HashMap<String, Cell> healthyCells) {
         neighbors = 0;
-        int tempX = 0;
-        int tempY = 0;
-        int realX = cell.getCoordX();
-        int realY = cell.getCoordY();
 
-        for (Cell checkedCell : healthyCells) {
-            tempX = checkedCell.getCoordX();
-            tempY = checkedCell.getCoordY();
-            if (checkedCell.getHealth()) {
-                if (tempX == realX - 1) {
-                    if ((tempY == realY - 1) 
-                            || (tempY == realY) 
-                                || (tempY == realY + 1))
-                        neighbors++;
-                }
-                if (tempX == realX) {
-                    if ((tempY == realY - 1) 
-                            || (tempY == realY + 1))
-                        neighbors++;
-                }
-                if (tempX == realX + 1) {
-                    if ((tempY == realY - 1) 
-                            || (tempY == realY) 
-                                || (tempY == realY + 1))
-                        neighbors++;
-                }
-            }
-        }
+        if (healthyCells.containsKey(
+            (cell.getCoordX() - 1) + "," + cell.getCoordY()))
+            neighbors++;
+        if (healthyCells.containsKey(
+            (cell.getCoordX()- 1) + "," + (cell.getCoordY() + 1)))
+            neighbors++;
+        if (healthyCells.containsKey(
+            (cell.getCoordX() - 1) + "," + (cell.getCoordY() - 1)))
+            neighbors++;
+        if (healthyCells.containsKey(
+            cell.getCoordX() + "," + (cell.getCoordY() + 1)))
+            neighbors++;
+        if (healthyCells.containsKey(
+            cell.getCoordX() + "," + (cell.getCoordY() - 1)))
+            neighbors++;
+        if (healthyCells.containsKey(
+            (cell.getCoordX() + 1) + "," + cell.getCoordY()))
+            neighbors++;
+        if (healthyCells.containsKey(
+            (cell.getCoordX() + 1) + "," + (cell.getCoordY() + 1)))
+            neighbors++;
+        if (healthyCells.containsKey(
+            (cell.getCoordX() + 1) + "," + (cell.getCoordY() - 1)))
+            neighbors++;
 
         return neighbors;
     }
     
     //---Iterates Through Each Rectangle, Checking its Neighbors----------------
     public void ruleCheck() {
-        ArrayList<Cell> healthyCells = new ArrayList<Cell>();
-        for (Cell cell : rectArray) {
+        HashMap<String, Cell> healthyCells = new HashMap<>();
+        for (Cell cell : cells.values()) {
             if (cell.getHealth())
-                healthyCells.add(cell);
+                healthyCells.put(cell.getCoordX() + "," + cell.getCoordY(), cell);
         }
 
-        for (Cell cell : rectArray) { 
+        for (Cell cell : cells.values()) { 
             cell.setNeighbors(computeNeighbors(cell, healthyCells));
         }
         
         
         // Applying rules of the "game"
-        for (int i = 0; i < rectArray.size(); i++) {
-            if (rectArray.get(i).getNeighbors() < 2) {
-                rectArray.get(i).setHealth(false);
-                rectArray.get(i).setColor(null);
-            } else if (rectArray.get(i).getNeighbors() > 3) {
-                rectArray.get(i).setHealth(false);
-                rectArray.get(i).setColor(null);
-            } else if (rectArray.get(i).getNeighbors() == 3) {
-                rectArray.get(i).setHealth(true);
-                rectArray.get(i).setColor(Color.BLACK);
+        for (Cell cell : cells.values()) {
+            if (cell.getNeighbors() < 2) {
+                cell.setHealth(false);
+                cell.setColor(null);
+            } else if (cell.getNeighbors() > 3) {
+                cell.setHealth(false);
+                cell.setColor(null);
+            } else if (cell.getNeighbors() == 3) {
+                cell.setHealth(true);
+                cell.setColor(Color.BLACK);
             }
         }
     }
     
     //---Draws a glider pattern-------------------------------------------------
     public void glider() {
-        for (int i = 0; i < gliderArray.length; i++) {
-            rectArray.get(gliderArray[i]).setHealth(true);
-            rectArray.get(gliderArray[i]).setColor(Color.BLACK);
+        for (String index : gliderArray) {
+            Cell cell = cells.get(index);
+            cell.setHealth(true);
+            cell.setColor(Color.BLACK);
         }
     }
     
     //---Applies a vertical column ("Vertical Divider)--------------------------
     public void vertical() {
-        int size = this.boardSize;
-        int bound = ((size * size) - 2) - size;
-        for (int i = (size / 2) - 1; i <= bound; i += size) {
-            rectArray.get(i).setHealth(true);
-            rectArray.get(i).setColor(Color.BLACK);
+        int position = (int) this.boardSize / 2;
+        for (int i = 1; i <= this.boardSize; i ++) {
+            Cell cell = cells.get(i + "," + position);
+            cell.setHealth(true);
+            cell.setColor(Color.BLACK);
         }
     }
     
@@ -192,27 +183,29 @@ public class Board extends JPanel {
     public void random() {
         Random rand = new Random();
 
-        for (int i = 0; i < rectArray.size(); i++) {
+        for (Cell cell : cells.values()) {
             if (rand.nextBoolean() == true) {
-                rectArray.get(i).setHealth(true);
-                rectArray.get(i).setColor(Color.BLACK);
+                cell.setHealth(true);
+                cell.setColor(Color.BLACK);
             }
         }
     }
 
     //---Applies the Gosper Glider Gun pattern----------------------------------
     public void gosperGun() {
-        for (int i = 0; i < gosperGunArray.length; i++) {
-            rectArray.get(gosperGunArray[i] + 2).setHealth(true);
-            rectArray.get(gosperGunArray[i] + 2).setColor(Color.BLACK);
+        for (String index : gosperGunArray) {
+            Cell cell = cells.get(index);
+            cell.setHealth(true);
+            cell.setColor(Color.BLACK);
         }
     }
     
     //---Applies a "lightweight" spaceship pattern------------------------------
     public void lwSpaceship() {
-        for (int i = 0; i < spaceshipArray.length; i++) {
-            rectArray.get(spaceshipArray[i]).setHealth(true);
-            rectArray.get(spaceshipArray[i]).setColor(Color.BLACK);
+        for (String index : spaceshipArray) {
+            Cell cell = cells.get(index);
+            cell.setHealth(true);
+            cell.setColor(Color.BLACK);
         }
     }
 }
